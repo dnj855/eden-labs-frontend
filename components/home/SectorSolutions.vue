@@ -11,7 +11,7 @@
       </div>
 
       <!-- Sélecteur de secteur -->
-      <div class="mt-12">
+      <div class="my-12">
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           <button
             v-for="sector in sectors"
@@ -48,29 +48,19 @@
       </div>
 
       <!-- Contenu du secteur -->
-      <TransitionGroup
-        tag="div"
-        class="mt-16"
-        enter-active-class="transition-all duration-300 ease-out"
-        enter-from-class="opacity-0 -translate-y-4"
-        enter-to-class="opacity-100 translate-y-0"
-        leave-active-class="transition-all duration-200 ease-in"
-        leave-from-class="opacity-100 translate-y-0"
-        leave-to-class="opacity-0 translate-y-4"
-      >
+      <Transition>
         <div
-          v-for="sector in [currentSector]"
-          :key="sector.id"
+          :key="currentSector.id"
           class="grid grid-cols-1 gap-8 lg:grid-cols-3"
         >
           <!-- Cas d'usage -->
           <div class="lg:col-span-2">
             <h3 class="font-headers text-2xl font-bold text-secondary">
-              Solutions pour {{ sector.name }}
+              Solutions pour {{ currentSector.name }}
             </h3>
             <div class="mt-8 grid gap-8 sm:grid-cols-2">
               <div
-                v-for="useCase in sector.useCases"
+                v-for="useCase in currentSector.useCases"
                 :key="useCase.id"
                 class="relative rounded-lg bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-xl"
               >
@@ -105,17 +95,17 @@
                 Étude de cas
               </h4>
               <img
-                :src="sector.caseStudy.logo"
-                :alt="sector.caseStudy.company"
+                :src="currentSector.caseStudy.logo"
+                :alt="currentSector.caseStudy.company"
                 class="h-8"
               />
             </div>
             <p class="mt-4 text-secondary/70">
-              {{ sector.caseStudy.description }}
+              {{ currentSector.caseStudy.description }}
             </p>
             <div class="mt-6 grid grid-cols-2 gap-4">
               <div
-                v-for="(stat, index) in sector.caseStudy.stats"
+                v-for="(stat, index) in currentSector.caseStudy.stats"
                 :key="index"
                 class="rounded-lg bg-light/50 p-4"
               >
@@ -130,20 +120,20 @@
             <div class="mt-6">
               <div class="flex items-start">
                 <img
-                  :src="sector.caseStudy.testimonial.avatar"
-                  :alt="sector.caseStudy.testimonial.name"
+                  :src="currentSector.caseStudy.testimonial.avatar"
+                  :alt="currentSector.caseStudy.testimonial.name"
                   class="h-10 w-10 rounded-full ring-2 ring-primary"
                 />
                 <div class="ml-4">
                   <p class="text-sm italic text-secondary/70">
-                    "{{ sector.caseStudy.testimonial.quote }}"
+                    "{{ currentSector.caseStudy.testimonial.quote }}"
                   </p>
                   <div class="mt-1">
                     <p class="text-sm font-medium text-secondary">
-                      {{ sector.caseStudy.testimonial.name }}
+                      {{ currentSector.caseStudy.testimonial.name }}
                     </p>
                     <p class="text-xs text-tertiary">
-                      {{ sector.caseStudy.testimonial.role }}
+                      {{ currentSector.caseStudy.testimonial.role }}
                     </p>
                   </div>
                 </div>
@@ -151,7 +141,7 @@
             </div>
           </div>
         </div>
-      </TransitionGroup>
+      </Transition>
 
       <!-- CTAs -->
       <div class="mt-12 flex flex-col items-center space-y-4">
@@ -175,16 +165,16 @@
 
 <script setup lang="ts">
 import {
-    ArrowRightIcon,
-    ArrowTrendingUpIcon,
-    BriefcaseIcon,
-    ChartBarIcon,
-    ClockIcon,
-    CogIcon,
-    CurrencyEuroIcon,
-    DocumentTextIcon,
-    ShoppingBagIcon,
-    UserGroupIcon
+  ArrowRightIcon,
+  ArrowTrendingUpIcon,
+  BriefcaseIcon,
+  ChartBarIcon,
+  ClockIcon,
+  CogIcon,
+  CurrencyEuroIcon,
+  DocumentTextIcon,
+  ShoppingBagIcon,
+  UserGroupIcon
 } from '@heroicons/vue/24/outline'
 import { computed, ref } from 'vue'
 

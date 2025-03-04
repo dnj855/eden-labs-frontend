@@ -1,48 +1,54 @@
 <template>
   <div>
     <!-- Hero -->
-    <TheHero
+    <TheHeroComponent
+      ref="heroSection"
       @open-booking="openBookingModal"
       @open-solutions="scrollToSolutions"
     />
 
     <!-- Problématiques & Solutions -->
-    <ProblemsSolutions
-      ref="solutionsSection"
+    <ProblemsSolutionsComponent
+      ref="problemsSection"
       @open-qualification="openQualificationModal"
     />
 
     <!-- Parcours -->
-    <JourneyTimeline
+    <JourneyTimelineComponent
+      ref="journeySection"
       @start-audit="openBookingModal"
       @learn-more="scrollToResources"
     />
 
     <!-- Solutions par secteur -->
-    <SectorSolutions
+    <SectorSolutionsComponent
+      ref="sectorsSection"
       @explore-sector="exploreSector"
       @contact="openContactModal"
     />
 
     <!-- Démo IA -->
-    <AiDemo
+    <AiDemoComponent
+      ref="aiDemoSection"
       @start-audit="openBookingModal"
     />
 
     <!-- Témoignages -->
-    <Testimonials
+    <TestimonialsComponent
+      ref="testimonialsSection"
       @start-audit="openBookingModal"
     />
 
     <!-- Ressources -->
-    <Resources
+    <ResourcesComponent
       ref="resourcesSection"
       @download-resource="downloadResource"
       @subscribe="subscribeNewsletter"
     />
 
     <!-- CTA Booking -->
-    <BookingCTA
+    <BookingCTAComponent
+      ref="bookingSection"
       @submit-booking="submitBooking"
     />
 
@@ -102,24 +108,93 @@
 
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { ref } from 'vue'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, ref } from 'vue'
+
+// Types pour les composants
 
 // Composants
-import AiDemo from '~/components/home/AiDemo.vue'
-import BookingCTA from '~/components/home/BookingCTA.vue'
-import JourneyTimeline from '~/components/home/JourneyTimeline.vue'
-import ProblemsSolutions from '~/components/home/ProblemsSolutions.vue'
-import Resources from '~/components/home/Resources.vue'
-import SectorSolutions from '~/components/home/SectorSolutions.vue'
-import Testimonials from '~/components/home/Testimonials.vue'
-import TheHero from '~/components/home/TheHero.vue'
+import AiDemoComponent from '~/components/home/AiDemo.vue'
+import BookingCTAComponent from '~/components/home/BookingCTA.vue'
+import JourneyTimelineComponent from '~/components/home/JourneyTimeline.vue'
+import ProblemsSolutionsComponent from '~/components/home/ProblemsSolutions.vue'
+import ResourcesComponent from '~/components/home/Resources.vue'
+import SectorSolutionsComponent from '~/components/home/SectorSolutions.vue'
+import TestimonialsComponent from '~/components/home/Testimonials.vue'
+import TheHeroComponent from '~/components/home/TheHero.vue'
+
+// Enregistrement du plugin ScrollTrigger
+gsap.registerPlugin(ScrollTrigger)
 
 // Refs pour les sections
-const solutionsSection = ref(null)
-const resourcesSection = ref(null)
+const solutionsSection = ref<InstanceType<typeof ProblemsSolutionsComponent> | null>(null)
+const resourcesSection = ref<InstanceType<typeof ResourcesComponent> | null>(null)
+const heroSection = ref<InstanceType<typeof TheHeroComponent> | null>(null)
+const problemsSection = ref<InstanceType<typeof ProblemsSolutionsComponent> | null>(null)
+const journeySection = ref<InstanceType<typeof JourneyTimelineComponent> | null>(null)
+const sectorsSection = ref<InstanceType<typeof SectorSolutionsComponent> | null>(null)
+const aiDemoSection = ref<InstanceType<typeof AiDemoComponent> | null>(null)
+const testimonialsSection = ref<InstanceType<typeof TestimonialsComponent> | null>(null)
+const bookingSection = ref<InstanceType<typeof BookingCTAComponent> | null>(null)
 
 // État des modals
 const showBookingModal = ref(false)
+
+// Animations
+onMounted(() => {
+  // Animation Hero
+  const heroEl = heroSection.value?.$el
+  if (heroEl) {
+    const heroTitle = heroEl.querySelector('h1')
+    const heroStats = heroEl.querySelector('.stats')
+    
+    if (heroTitle) {
+      gsap.from(heroTitle, {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out'
+      })
+    }
+
+    if (heroStats) {
+      gsap.from(heroStats, {
+        y: 30,
+        opacity: 0,
+        duration: 1,
+        delay: 0.5,
+        ease: 'power3.out'
+      })
+    }
+  }
+
+  // Animation des sections au scroll
+  const sections = [
+    problemsSection.value?.$el,
+    journeySection.value?.$el,
+    sectorsSection.value?.$el,
+    aiDemoSection.value?.$el,
+    testimonialsSection.value?.$el,
+    resourcesSection.value?.$el,
+    bookingSection.value?.$el
+  ].filter((section): section is HTMLElement => section !== undefined && section !== null)
+
+  sections.forEach((section) => {
+    gsap.from(section, {
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        end: 'top 20%',
+        toggleActions: 'play none none reverse'
+      },
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out'
+    })
+  })
+})
 
 // Méthodes de navigation
 function scrollToSection(ref: any) {
