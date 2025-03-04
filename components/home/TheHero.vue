@@ -25,7 +25,7 @@
             </p>
             
             <!-- Statistiques de confiance -->
-            <div class="mt-8 space-y-4 sm:flex sm:space-x-8 sm:space-y-0">
+            <div class="mt-8 space-y-4 sm:flex sm:space-x-8 sm:space-y-0 stats">
               <div>
                 <p class="text-3xl font-bold text-primary">+45%</p>
                 <p class="mt-1 text-sm text-light/70">Gain de productivité moyen</p>

@@ -17,7 +17,7 @@
           <li
             v-for="(step, index) in steps"
             :key="step.id"
-            class="relative"
+            class="relative timeline-step"
           >
             <div class="flex items-center md:flex-col md:items-center">
               <span
@@ -77,7 +77,7 @@
             v-for="(step, index) in steps"
             :key="step.id"
             @mouseenter="activeStep = index"
-            class="relative"
+            class="relative timeline-step"
             :class="[
               activeStep >= index ? 'opacity-100' : 'opacity-70',
               'transition-all duration-300'

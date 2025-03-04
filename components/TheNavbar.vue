@@ -1,7 +1,7 @@
 <template>
-  <nav class="bg-light shadow-sm">
+  <nav class="bg-light shadow-sm py-3">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
+      <div class="flex justify-between">
         <div class="flex">
           <div class="flex-shrink-0 flex items-center">
             <NuxtLink to="/" class="text-primary font-headers font-bold text-xl">
@@ -13,7 +13,7 @@
               v-for="item in navigationItems" 
               :key="item.path"
               :to="item.path"
-              class="inline-flex items-center px-1 pt-1 border-b-2 font-body"
+              class="inline-flex items-center px-1 h-full border-b-2 font-body"
               :class="[
                 $route.path === item.path
                   ? 'border-primary text-secondary'
@@ -83,7 +83,7 @@
           {{ item.name }}
         </NuxtLink>
       </div>
-      <div class="pt-4 pb-3 border-t border-secondary/10">
+      <div class="pt-4 border-t border-secondary/10">
         <div class="mt-3 space-y-1">
           <button
             class="w-full text-left block px-4 py-2 text-base font-headers font-medium bg-gradient-to-r from-secondary to-tertiary text-primary hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200"

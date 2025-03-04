@@ -31,14 +31,10 @@
       </div>
 
       <!-- Problématiques et solutions -->
-      <div class="mt-12 space-y-10 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-x-8 sm:gap-y-10">
-        <TransitionGroup
-          enter-active-class="transition duration-200 ease-out"
-          enter-from-class="opacity-0 translate-y-4"
-          enter-to-class="opacity-100 translate-y-0"
-          leave-active-class="transition duration-150 ease-in"
-          leave-from-class="opacity-100 translate-y-0"
-          leave-to-class="opacity-0 translate-y-4"
+      <Transition>
+        <div
+          :key="activeSector"
+          class="mt-12 space-y-10 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-x-8 sm:gap-y-10"
         >
           <div
             v-for="problem in currentProblems"
@@ -46,7 +42,6 @@
             class="relative bg-white p-6 rounded-lg shadow-sm hover:shadow-xl transition-all duration-300"
           >
             <!-- Icône -->
-            <div class="absolute -top-4 -right-4 w-24 h-24 bg-primary rounded-full opacity-20"></div>
             <div>
               <div class="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-secondary-tertiary text-light">
                 <component :is="problem.icon" class="h-6 w-6" aria-hidden="true" />
@@ -85,8 +80,8 @@
               </div>
             </div>
           </div>
-        </TransitionGroup>
-      </div>
+        </div>
+      </Transition>
 
       <!-- CTA -->
       <div class="mt-12 text-center">
@@ -104,14 +99,14 @@
 
 <script setup lang="ts">
 import {
-    ArrowRightIcon,
-    ChartBarIcon,
-    ClockIcon,
-    CurrencyEuroIcon,
-    LightBulbIcon,
-    UserGroupIcon
-} from '@heroicons/vue/24/outline'
-import { computed, ref } from 'vue'
+  ArrowRightIcon,
+  ChartBarIcon,
+  ClockIcon,
+  CurrencyEuroIcon,
+  LightBulbIcon,
+  UserGroupIcon
+} from '@heroicons/vue/24/outline';
+import { computed, ref } from 'vue';
 
 const sectors = [
   { id: 'marketing', name: 'Marketing' },
@@ -123,7 +118,25 @@ const sectors = [
 
 const activeSector = ref('marketing')
 
-const problems = {
+interface Problem {
+  id: number;
+  icon: any;
+  title: string;
+  description: string;
+  solution: string;
+  testimonial: {
+    quote: string;
+    name: string;
+    role: string;
+    avatar: string;
+  };
+}
+
+interface Problems {
+  [key: string]: Problem[];
+}
+
+const problems: Problems = {
   marketing: [
     {
       id: 1,
