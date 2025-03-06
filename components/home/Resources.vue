@@ -1,22 +1,38 @@
 <template>
-  <section class="py-16 bg-white lg:py-24">
+  <section class="py-10 sm:py-12 md:py-16 lg:py-24 bg-white">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h2 class="font-headers text-3xl font-extrabold tracking-tight text-secondary sm:text-4xl">
+        <h2 class="font-headers text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-secondary">
           Nos dernières ressources
         </h2>
-        <p class="mx-auto mt-4 max-w-2xl text-xl text-secondary/70">
+        <p class="mx-auto mt-3 sm:mt-4 max-w-2xl text-base sm:text-lg md:text-xl text-secondary/70">
           Découvrez nos guides pratiques, études de cas et webinaires pour maîtriser l'IA.
         </p>
       </div>
 
-      <!-- Filtres -->
-      <div class="mt-12">
-        <div class="flex justify-center space-x-2">
+      <!-- Filtres - Version mobile (select) -->
+      <div class="mt-6 sm:mt-8 md:mt-12 sm:hidden">
+        <select 
+          v-model="activeType"
+          class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:outline-none focus:ring-primary focus:border-primary"
+        >
+          <option 
+            v-for="type in resourceTypes" 
+            :key="type.id" 
+            :value="type.id"
+          >
+            {{ type.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtres - Version tablette/desktop -->
+      <div class="mt-6 sm:mt-8 md:mt-12 hidden sm:block">
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-3">
           <button
             v-for="type in resourceTypes"
             :key="type.id"
-            class="flex items-center rounded-md px-4 py-2 text-sm font-medium transition-colors duration-200"
+            class="flex items-center rounded-md px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors duration-200"
             :class="[
               activeType === type.id
                 ? 'bg-gradient-secondary-tertiary text-light'
@@ -26,7 +42,7 @@
           >
             <component
               :is="type.icon"
-              class="mr-2 inline-block h-5 w-5"
+              class="mr-1.5 sm:mr-2 inline-block h-4 w-4 sm:h-5 sm:w-5"
             />
             {{ type.name }}
           </button>
@@ -34,10 +50,10 @@
       </div>
 
       <!-- Grille de ressources -->
-      <div class="mt-12">
+      <div class="mt-6 sm:mt-8 md:mt-12">
         <TransitionGroup
           tag="div"
-          class="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+          class="grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3"
           enter-active-class="transition-all duration-300 ease-out"
           enter-from-class="opacity-0 transform translate-y-4"
           enter-to-class="opacity-100 transform translate-y-0"
@@ -55,16 +71,16 @@
               <img
                 :src="resource.image"
                 :alt="resource.title"
-                class="h-48 w-full object-cover"
+                class="h-40 sm:h-44 md:h-48 w-full object-cover"
               />
             </div>
 
             <!-- Contenu -->
-            <div class="flex flex-1 flex-col justify-between bg-white p-6">
+            <div class="flex flex-1 flex-col justify-between bg-white p-4 sm:p-5 md:p-6">
               <div class="flex-1">
                 <p class="text-sm font-medium text-primary">
                   <span
-                    class="inline-flex items-center rounded-full px-3 py-0.5 text-sm font-medium"
+                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-medium"
                     :class="{
                       'bg-secondary/10 text-secondary': resource.type === 'guide',
                       'bg-primary/10 text-primary': resource.type === 'webinar',
@@ -75,41 +91,39 @@
                   </span>
                 </p>
                 <div class="mt-2 block">
-                  <h3 class="font-headers text-xl font-semibold text-secondary">
+                  <h3 class="font-headers text-base sm:text-lg md:text-xl font-semibold text-secondary line-clamp-2">
                     {{ resource.title }}
                   </h3>
-                  <p class="mt-3 text-base text-secondary/70">
+                  <p class="mt-2 sm:mt-3 text-sm sm:text-base text-secondary/70 line-clamp-3">
                     {{ resource.description }}
                   </p>
                 </div>
               </div>
 
               <!-- Métriques -->
-              <div class="mt-6 flex items-center">
-                <div class="flex space-x-4 text-sm text-secondary/50">
-                  <span class="inline-flex items-center">
-                    <ClockIcon class="mr-1 h-4 w-4" />
-                    {{ resource.duration }}
-                  </span>
-                  <span class="inline-flex items-center">
-                    <DocumentTextIcon class="mr-1 h-4 w-4" />
-                    {{ resource.pages }}
-                  </span>
-                  <span class="inline-flex items-center">
-                    <UserGroupIcon class="mr-1 h-4 w-4" />
-                    {{ resource.downloads }}+ téléchargements
-                  </span>
-                </div>
+              <div class="mt-4 sm:mt-5 md:mt-6 flex flex-wrap items-center gap-2 sm:gap-4">
+                <span class="inline-flex items-center text-xs sm:text-sm text-secondary/50">
+                  <ClockIcon class="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                  {{ resource.duration }}
+                </span>
+                <span class="inline-flex items-center text-xs sm:text-sm text-secondary/50">
+                  <DocumentTextIcon class="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                  {{ resource.pages }}
+                </span>
+                <span class="inline-flex items-center text-xs sm:text-sm text-secondary/50">
+                  <UserGroupIcon class="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                  {{ resource.downloads }}+
+                </span>
               </div>
 
               <!-- CTA -->
-              <div class="mt-6">
+              <div class="mt-4 sm:mt-5 md:mt-6">
                 <button
-                  class="inline-flex w-full items-center justify-center rounded-md border-2 border-primary bg-primary px-4 py-2 text-sm font-medium text-secondary transition-colors duration-200 hover:bg-primary-light hover:border-primary-light"
+                  class="inline-flex w-full items-center justify-center rounded-md border-2 border-primary bg-primary px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-secondary transition-colors duration-200 hover:bg-primary-light hover:border-primary-light"
                   @click="$emit('downloadResource', resource)"
                 >
                   Télécharger gratuitement
-                  <ArrowDownTrayIcon class="ml-2 -mr-1 h-5 w-5" aria-hidden="true" />
+                  <ArrowDownTrayIcon class="ml-1.5 sm:ml-2 -mr-1 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -118,38 +132,60 @@
       </div>
 
       <!-- CTA Newsletter -->
-      <div class="mt-16 overflow-hidden rounded-lg bg-gradient-secondary-tertiary shadow-xl lg:grid lg:grid-cols-2 lg:gap-4">
-        <div class="px-6 pt-10 pb-12 sm:px-16 sm:pt-16 lg:py-16 lg:pr-0 xl:px-20 xl:py-20">
-          <div class="lg:self-center">
-            <h2 class="font-headers text-3xl font-extrabold text-light sm:text-4xl">
-              <span class="block">Restez informé</span>
-              <span class="block">des dernières innovations IA</span>
-            </h2>
-            <p class="mt-4 text-lg leading-6 text-light/80">
-              Recevez nos meilleures ressources et actualités IA directement dans votre boîte mail.
-            </p>
-            <div class="mt-8 flex">
-              <input
-                v-model="email"
-                type="email"
-                class="w-full rounded-md border-light px-5 py-3 placeholder-secondary/50 focus:border-primary focus:ring-2 focus:ring-primary sm:max-w-xs"
-                placeholder="Votre email"
+      <div class="mt-8 sm:mt-12 md:mt-16 overflow-hidden rounded-lg bg-gradient-secondary-tertiary shadow-xl">
+        <div class="px-4 sm:px-6 md:px-8 lg:px-0 py-8 sm:py-10 lg:py-0">
+          <div class="lg:grid lg:grid-cols-2 lg:gap-4">
+            <div class="lg:self-center lg:py-16 lg:pr-0 xl:py-20 xl:pl-8 xl:pr-0">
+              <h2 class="font-headers text-xl sm:text-2xl md:text-3xl font-extrabold text-light">
+                <span class="block">Restez informé</span>
+                <span class="block">des dernières innovations IA</span>
+              </h2>
+              <p class="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg leading-6 text-light/80">
+                Recevez nos meilleures ressources et actualités IA directement dans votre boîte mail.
+              </p>
+              
+              <!-- Formulaire mobile (empilé) -->
+              <div class="mt-4 sm:mt-6 md:mt-8 sm:hidden flex flex-col space-y-3">
+                <input
+                  v-model="email"
+                  type="email"
+                  class="w-full rounded-md border-light px-3 py-2 placeholder-secondary/50 focus:border-primary focus:ring-2 focus:ring-primary"
+                  placeholder="Votre email"
+                />
+                <button
+                  class="w-full rounded-md border-2 border-primary bg-primary px-3 py-2 font-medium text-secondary transition-colors duration-200 hover:bg-primary-light hover:border-primary-light"
+                  @click="$emit('subscribe', email)"
+                >
+                  S'abonner
+                </button>
+              </div>
+              
+              <!-- Formulaire tablette/desktop (côte à côte) -->
+              <div class="mt-4 sm:mt-6 md:mt-8 hidden sm:flex">
+                <input
+                  v-model="email"
+                  type="email"
+                  class="w-full rounded-md border-light px-3 sm:px-4 md:px-5 py-2 sm:py-3 placeholder-secondary/50 focus:border-primary focus:ring-2 focus:ring-primary sm:max-w-xs"
+                  placeholder="Votre email"
+                />
+                <button
+                  class="ml-3 flex-shrink-0 rounded-md border-2 border-primary bg-primary px-3 sm:px-4 md:px-5 py-2 sm:py-3 font-medium text-secondary transition-colors duration-200 hover:bg-primary-light hover:border-primary-light"
+                  @click="$emit('subscribe', email)"
+                >
+                  S'abonner
+                </button>
+              </div>
+            </div>
+            
+            <!-- Image (masquée sur mobile petit) -->
+            <div class="relative hidden sm:block h-64 md:h-auto lg:h-full">
+              <img
+                class="absolute inset-0 h-full w-full object-cover object-left-top lg:static lg:translate-x-0 lg:translate-y-0 sm:translate-x-16 transform translate-x-6 translate-y-6 rounded-md"
+                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80"
+                alt="App screenshot"
               />
-              <button
-                class="ml-3 flex-shrink-0 rounded-md border-2 border-primary bg-primary px-5 py-3 font-medium text-secondary transition-colors duration-200 hover:bg-primary-light hover:border-primary-light"
-                @click="$emit('subscribe', email)"
-              >
-                S'abonner
-              </button>
             </div>
           </div>
-        </div>
-        <div class="relative -mt-6 aspect-w-5 aspect-h-3 md:aspect-w-2 md:aspect-h-1">
-          <img
-            class="transform translate-x-6 translate-y-6 rounded-md object-cover object-left-top sm:translate-x-16 lg:translate-y-20"
-            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80"
-            alt="App screenshot"
-          />
         </div>
       </div>
     </div>
@@ -258,4 +294,4 @@ function getResourceTypeName(type: string): string {
       return type
   }
 }
-</script> 
+</script>
