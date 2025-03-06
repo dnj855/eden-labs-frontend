@@ -43,79 +43,7 @@
     <ResourcesComponent
       ref="resourcesSection"
       @download-resource="downloadResource"
-      @subscribe="subscribeNewsletter"
     />
-
-    <!-- CTA Booking -->
-    <BookingCTAComponent
-      ref="bookingSection"
-      @submit-booking="submitBooking"
-    />
-
-    <!-- Modals -->
-    <!-- Modal de réservation -->
-    <TransitionRoot appear :show="showBookingModal" as="template">
-      <Dialog as="div" @close="showBookingModal = false" class="relative z-50" :initialFocus="bookingModalInitialFocus">
-        <TransitionChild
-          as="template"
-          enter="duration-300 ease-out"
-          enter-from="opacity-0"
-          enter-to="opacity-100"
-          leave="duration-200 ease-in"
-          leave-from="opacity-100"
-          leave-to="opacity-0"
-        >
-          <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" />
-        </TransitionChild>
-
-        <div class="fixed inset-0 overflow-y-auto">
-          <div class="flex min-h-full items-center justify-center p-4 text-center">
-            <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0 scale-95"
-              enter-to="opacity-100 scale-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100 scale-100"
-              leave-to="opacity-0 scale-95"
-            >
-              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
-                <div class="absolute top-0 right-0 pt-4 pr-4">
-                  <button
-                    type="button"
-                    class="text-secondary/50 hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
-                    @click="showBookingModal = false"
-                  >
-                    <span class="sr-only">Fermer</span>
-                    <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </div>
-                
-                <DialogTitle as="h3" class="text-lg sm:text-xl font-headers font-medium leading-6 text-secondary">
-                  Réservation confirmée
-                </DialogTitle>
-                <div class="mt-2">
-                  <p class="text-sm sm:text-base text-secondary/70">
-                    Merci pour votre intérêt ! Nous vous contacterons dans les 24h pour planifier votre audit.
-                  </p>
-                </div>
-
-                <div class="mt-4 sm:mt-6">
-                  <button
-                    ref="bookingModalInitialFocus"
-                    type="button"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm sm:text-base font-medium text-secondary hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                    @click="showBookingModal = false"
-                  >
-                    Compris, merci !
-                  </button>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
-        </div>
-      </Dialog>
-    </TransitionRoot>
 
     <!-- Bouton retour en haut -->
     <transition
@@ -320,17 +248,6 @@ function openContactModal() {
 function downloadResource(resource: any) {
   // TODO: Implémenter le téléchargement de ressource
   console.log('Télécharger la ressource:', resource)
-}
-
-function subscribeNewsletter(email: string) {
-  // TODO: Implémenter l'inscription à la newsletter
-  console.log('Inscription à la newsletter:', email)
-}
-
-function submitBooking(formData: any) {
-  // TODO: Implémenter la soumission du formulaire
-  console.log('Soumission du formulaire:', formData)
-  openBookingModal()
 }
 
 // SEO
