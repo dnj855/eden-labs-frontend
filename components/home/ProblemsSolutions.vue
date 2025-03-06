@@ -1,26 +1,26 @@
 <template>
-  <section class="py-16 bg-light overflow-hidden lg:py-24">
+  <section class="py-10 sm:py-12 md:py-16 lg:py-24 bg-light overflow-hidden">
     <div class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
       <div class="relative">
-        <h2 class="text-center text-3xl leading-8 font-headers font-extrabold tracking-tight text-secondary sm:text-4xl">
+        <h2 class="text-center text-2xl sm:text-3xl md:text-4xl leading-8 font-headers font-extrabold tracking-tight text-secondary">
           L'IA peut transformer votre entreprise, mais par où commencer?
         </h2>
-        <p class="mt-4 max-w-3xl mx-auto text-center text-xl text-secondary/70">
+        <p class="mt-3 sm:mt-4 max-w-3xl mx-auto text-center text-base sm:text-lg md:text-xl text-secondary/70">
           Découvrez comment nous répondons aux défis courants de la transformation numérique.
         </p>
       </div>
 
       <!-- Sélecteur de secteur -->
-      <div class="mt-12">
-        <div class="flex justify-center space-x-1">
+      <div class="mt-8 sm:mt-10 md:mt-12">
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-1">
           <template v-for="(sector, index) in sectors" :key="sector.id">
             <button
-              class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200"
+              class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-md transition-colors duration-200"
               :class="{
                 'bg-gradient-secondary-tertiary text-light': activeSector === sector.id,
                 'text-secondary hover:text-tertiary hover:bg-light': activeSector !== sector.id,
-                'rounded-l-lg': index === 0,
-                'rounded-r-lg': index === sectors.length - 1
+                'rounded-l-lg': index === 0 && !isMobile,
+                'rounded-r-lg': index === sectors.length - 1 && !isMobile
               }"
               @click="activeSector = sector.id"
             >
@@ -34,46 +34,46 @@
       <Transition>
         <div
           :key="activeSector"
-          class="mt-12 space-y-10 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-x-8 sm:gap-y-10"
+          class="mt-8 sm:mt-10 md:mt-12 space-y-6 sm:space-y-8 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-x-6 lg:gap-x-8 md:gap-y-8 lg:gap-y-10"
         >
           <div
             v-for="problem in currentProblems"
             :key="problem.id"
-            class="relative bg-white p-6 rounded-lg shadow-sm hover:shadow-xl transition-all duration-300"
+            class="relative bg-white p-4 sm:p-5 md:p-6 rounded-lg shadow-sm hover:shadow-xl transition-all duration-300"
           >
             <!-- Icône -->
             <div>
-              <div class="flex items-center justify-center h-12 w-12 rounded-md bg-gradient-secondary-tertiary text-light">
-                <component :is="problem.icon" class="h-6 w-6" aria-hidden="true" />
+              <div class="flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 rounded-md bg-gradient-secondary-tertiary text-light">
+                <component :is="problem.icon" class="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
               </div>
-              <div class="mt-5">
-                <h3 class="text-lg leading-6 font-headers font-medium text-secondary">{{ problem.title }}</h3>
-                <p class="mt-2 text-base text-secondary/70">{{ problem.description }}</p>
+              <div class="mt-4">
+                <h3 class="text-base sm:text-lg leading-6 font-headers font-medium text-secondary">{{ problem.title }}</h3>
+                <p class="mt-2 text-sm sm:text-base text-secondary/70">{{ problem.description }}</p>
               </div>
             </div>
 
             <!-- Solution -->
-            <div class="mt-4 border-t border-light pt-4">
-              <h4 class="text-sm font-accent font-semibold text-tertiary">Notre solution :</h4>
-              <p class="mt-2 text-sm text-secondary/70">{{ problem.solution }}</p>
+            <div class="mt-3 sm:mt-4 border-t border-light pt-3 sm:pt-4">
+              <h4 class="text-xs sm:text-sm font-accent font-semibold text-tertiary">Notre solution :</h4>
+              <p class="mt-1 sm:mt-2 text-xs sm:text-sm text-secondary/70">{{ problem.solution }}</p>
             </div>
 
             <!-- Témoignage -->
-            <div class="mt-6 border-t border-light pt-4">
+            <div class="mt-4 sm:mt-5 md:mt-6 border-t border-light pt-3 sm:pt-4">
               <div class="flex items-start">
                 <div class="flex-shrink-0">
                   <img
-                    class="h-10 w-10 rounded-full ring-2 ring-primary"
+                    class="h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-primary"
                     :src="problem.testimonial.avatar"
                     :alt="problem.testimonial.name"
                   />
                 </div>
-                <div class="ml-3">
-                  <p class="text-sm text-secondary/70 italic">
+                <div class="ml-2 sm:ml-3">
+                  <p class="text-xs sm:text-sm text-secondary/70 italic">
                     "{{ problem.testimonial.quote }}"
                   </p>
                   <div class="mt-1">
-                    <p class="text-sm font-medium text-secondary">{{ problem.testimonial.name }}</p>
+                    <p class="text-xs sm:text-sm font-medium text-secondary">{{ problem.testimonial.name }}</p>
                     <p class="text-xs text-tertiary">{{ problem.testimonial.role }}</p>
                   </div>
                 </div>
@@ -84,13 +84,14 @@
       </Transition>
 
       <!-- CTA -->
-      <div class="mt-12 text-center">
+      <div class="mt-8 sm:mt-10 md:mt-12 text-center">
         <button
-          class="inline-flex items-center px-6 py-3 border-2 border-primary bg-primary text-base font-medium rounded-md shadow-sm text-secondary hover:bg-primary-light hover:border-primary-light transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+          class="inline-flex items-center px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 border-2 border-primary bg-primary text-sm sm:text-base font-medium rounded-md shadow-sm text-secondary hover:bg-primary-light hover:border-primary-light transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           @click="$emit('openQualification')"
         >
-          Comment Eden Labs peut résoudre vos défis spécifiques
-          <ArrowRightIcon class="ml-2 -mr-1 h-5 w-5" aria-hidden="true" />
+          <span class="hidden sm:inline">Comment Eden Labs peut résoudre vos défis spécifiques</span>
+          <span class="sm:hidden">Résoudre vos défis spécifiques</span>
+          <ArrowRightIcon class="ml-2 -mr-1 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -106,7 +107,7 @@ import {
   LightBulbIcon,
   UserGroupIcon
 } from '@heroicons/vue/24/outline';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 
 const sectors = [
   { id: 'marketing', name: 'Marketing' },
@@ -117,6 +118,21 @@ const sectors = [
 ]
 
 const activeSector = ref('marketing')
+const isMobile = ref(false)
+
+// Responsive detection for mobile
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 640
+}
+
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 
 interface Problem {
   id: number;
@@ -214,4 +230,4 @@ const problems: Problems = {
 }
 
 const currentProblems = computed(() => problems[activeSector.value] || [])
-</script> 
+</script>

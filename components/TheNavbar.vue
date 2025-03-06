@@ -1,22 +1,22 @@
 <template>
-  <nav class="bg-light shadow-sm py-3">
+  <nav class="bg-light shadow-sm py-2 sm:py-3">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between">
-        <div class="flex">
+      <div class="flex justify-between h-14">
+        <div class="flex items-center">
           <div class="flex-shrink-0 flex items-center">
-            <NuxtLink to="/" class="text-primary font-headers font-bold text-xl">
+            <NuxtLink to="/" class="text-primary font-headers font-bold text-lg sm:text-xl">
               Eden Labs
             </NuxtLink>
           </div>
-          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <div class="hidden sm:ml-6 md:ml-8 sm:flex sm:space-x-4 md:space-x-8">
             <NuxtLink 
               v-for="item in navigationItems" 
               :key="item.path"
               :to="item.path"
-              class="inline-flex items-center px-1 h-full border-b-2 font-body"
+              class="inline-flex items-center px-1 pt-1 border-b-2 text-sm md:text-base font-body transition-colors duration-200"
               :class="[
                 $route.path === item.path
-                  ? 'border-primary text-secondary'
+                  ? 'border-primary text-secondary font-medium'
                   : 'border-transparent text-secondary/70 hover:border-tertiary hover:text-tertiary'
               ]"
             >
@@ -26,23 +26,27 @@
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
           <button
-            class="bg-gradient-to-r from-secondary to-tertiary text-primary px-4 py-2 rounded-md text-sm font-headers font-medium hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
+            class="bg-gradient-to-r from-secondary to-tertiary text-primary px-3 py-2 md:px-4 md:py-2 rounded-md text-sm font-headers font-medium hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
           >
             Contactez-nous
           </button>
         </div>
-        <div class="-mr-2 flex items-center sm:hidden">
+        <div class="flex items-center sm:hidden">
           <button
-            @click="isOpen = !isOpen"
+            @click="toggleMenu"
             class="inline-flex items-center justify-center p-2 rounded-md text-secondary/50 hover:text-secondary hover:bg-light focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+            aria-expanded="false"
+            :aria-expanded="isOpen.toString()"
+            aria-controls="mobile-menu"
           >
-            <span class="sr-only">Ouvrir le menu</span>
+            <span class="sr-only">{{ isOpen ? 'Fermer' : 'Ouvrir' }} le menu</span>
             <svg
               class="h-6 w-6"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 v-if="!isOpen"
@@ -64,40 +68,52 @@
       </div>
     </div>
 
-    <div
-      v-show="isOpen"
-      class="sm:hidden"
+    <!-- Menu mobile -->
+    <transition
+      enter-active-class="transition duration-200 ease-out"
+      enter-from-class="transform -translate-y-3 opacity-0"
+      enter-to-class="transform translate-y-0 opacity-100"
+      leave-active-class="transition duration-100 ease-in"
+      leave-from-class="transform translate-y-0 opacity-100"
+      leave-to-class="transform -translate-y-3 opacity-0"
     >
-      <div class="pt-2 pb-3 space-y-1">
-        <NuxtLink
-          v-for="item in navigationItems"
-          :key="item.path"
-          :to="item.path"
-          class="block pl-3 pr-4 py-2 border-l-4 text-base font-body font-medium"
-          :class="[
-            $route.path === item.path
-              ? 'bg-light border-primary text-primary'
-              : 'border-transparent text-secondary/70 hover:bg-light hover:border-tertiary hover:text-tertiary'
-          ]"
-        >
-          {{ item.name }}
-        </NuxtLink>
-      </div>
-      <div class="pt-4 border-t border-secondary/10">
-        <div class="mt-3 space-y-1">
-          <button
-            class="w-full text-left block px-4 py-2 text-base font-headers font-medium bg-gradient-to-r from-secondary to-tertiary text-primary hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200"
+      <div
+        v-show="isOpen"
+        class="sm:hidden"
+        id="mobile-menu"
+      >
+        <div class="pt-2 pb-3 space-y-1">
+          <NuxtLink
+            v-for="item in navigationItems"
+            :key="item.path"
+            :to="item.path"
+            @click="closeMenu"
+            class="block pl-3 pr-4 py-2 border-l-4 text-base font-body font-medium transition-colors duration-200"
+            :class="[
+              $route.path === item.path
+                ? 'bg-light/50 border-primary text-primary'
+                : 'border-transparent text-secondary/70 hover:bg-light/30 hover:border-tertiary hover:text-tertiary'
+            ]"
           >
-            Contactez-nous
-          </button>
+            {{ item.name }}
+          </NuxtLink>
+        </div>
+        <div class="pt-4 pb-2 border-t border-secondary/10">
+          <div class="px-4 py-2">
+            <button
+              class="w-full text-left block px-4 py-2 text-base font-headers font-medium bg-gradient-to-r from-secondary to-tertiary text-primary rounded-md hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200"
+            >
+              Contactez-nous
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const isOpen = ref(false)
 
@@ -108,4 +124,44 @@ const navigationItems = [
   { name: 'Ressources', path: '/resources' },
   { name: 'Blog', path: '/blog' },
 ]
-</script> 
+
+// Fermer le menu quand l'écran devient large
+const checkScreenSize = () => {
+  if (window.innerWidth >= 640 && isOpen.value) {
+    isOpen.value = false
+  }
+}
+
+const toggleMenu = () => {
+  isOpen.value = !isOpen.value
+  
+  // Optionnel: empêcher le défilement du body quand le menu est ouvert
+  if (isOpen.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+}
+
+const closeMenu = () => {
+  isOpen.value = false
+  document.body.style.overflow = ''
+}
+
+// Gestionnaire pour la touche Escape
+const handleEscape = (e) => {
+  if (e.key === 'Escape' && isOpen.value) {
+    closeMenu()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', checkScreenSize)
+  document.addEventListener('keydown', handleEscape)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkScreenSize)
+  document.removeEventListener('keydown', handleEscape)
+})
+</script>
