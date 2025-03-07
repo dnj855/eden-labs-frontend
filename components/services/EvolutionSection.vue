@@ -18,7 +18,7 @@
       <div class="mx-auto mt-12 max-w-2xl lg:mt-16 lg:max-w-none">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div v-for="(product, index) in upcomingProducts" :key="index" 
-               class="group relative bg-white/50 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+              class="group relative bg-white/50 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
             <!-- Badge de statut -->
             <div class="absolute top-3 right-3">
               <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700">
@@ -67,7 +67,7 @@
               </p>
             </div>
             
-            <div class="flex-shrink-0">
+            <!-- <div class="flex-shrink-0">
               <form class="flex flex-col sm:flex-row gap-3" @submit.prevent="handleSubmit">
                 <div class="relative">
                   <input
@@ -80,7 +80,7 @@
                 </div>
                 <button
                   type="submit"
-                  class="flex-none rounded-md bg-primary px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  class="flex-none rounded-md bg-primary px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
                   S'inscrire
                 </button>
@@ -88,7 +88,7 @@
               <p class="mt-2 text-xs text-secondary/60">
                 Nous respectons votre vie privée. Désabonnement facile à tout moment.
               </p>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -118,8 +118,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RocketLaunchIcon, CheckIcon, EnvelopeIcon } from '@heroicons/vue/24/outline'
+import { CheckIcon, EnvelopeIcon, RocketLaunchIcon } from '@heroicons/vue/24/outline';
+import { ref } from 'vue';
 
 defineEmits<{
   (e: 'subscribe', email: string): void
@@ -159,12 +159,12 @@ const upcomingProducts = [
 ]
 
 // Gestion du formulaire
-function handleSubmit() {
-  if (email.value) {
-    // Émettre l'événement avec l'email
-    $emit('subscribe', email.value)
-    // Réinitialiser le formulaire
-    email.value = ''
-  }
-}
+// function handleSubmit() {
+//   if (email.value) {
+//     // Émettre l'événement avec l'email
+//     $emit('subscribe', email.value)
+//     // Réinitialiser le formulaire
+//     email.value = ''
+//   }
+// }
 </script> 

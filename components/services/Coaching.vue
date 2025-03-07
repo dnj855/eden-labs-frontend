@@ -214,7 +214,7 @@
       <div class="mt-8 sm:mt-10 lg:mt-12 flex justify-center">
         <button
           type="button"
-          class="group relative rounded-full bg-secondary px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-secondary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
+          class="group relative rounded-full bg-secondary px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-secondary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
           @click="$emit('open-booking')"
         >
           <span class="block transition-opacity duration-300 group-hover:opacity-0">

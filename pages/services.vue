@@ -156,7 +156,7 @@
                         <div class="mt-4 sm:mt-5 flex flex-col sm:flex-row-reverse sm:gap-3">
                           <button
                             type="submit"
-                            class="w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                            class="w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                           >
                             Envoyer ma demande
                           </button>
