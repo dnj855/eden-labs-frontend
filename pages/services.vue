@@ -182,25 +182,51 @@
         </div>
       </Dialog>
     </TransitionRoot>
+
+    <!-- Navigation latérale -->
+    <nav class="fixed left-8 top-1/2 transform -translate-y-1/2 z-40 hidden lg:block">
+      <div class="space-y-6">
+        <div v-for="section in sections" :key="section.id" class="group relative flex items-center">
+          <button
+            @click="scrollToSection(section.ref)"
+            :class="[
+              'w-3 h-3 rounded-full transition-all duration-300 border-2 relative z-10',
+              activeSection === section.id 
+                ? 'bg-primary border-primary' 
+                : 'border-secondary/30 hover:border-primary'
+            ]"
+            :aria-label="`Aller à la section ${section.title}`"
+          />
+          <div class="flex items-center">
+            <div class="w-8 h-[2px] scale-x-0 origin-left transition-transform duration-300 bg-primary group-hover:scale-x-100" />
+            <span 
+              class="absolute left-12 whitespace-nowrap px-3 py-1.5 text-sm text-secondary bg-white/90 rounded-md shadow-sm backdrop-blur-sm 
+              opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0"
+            >
+              {{ section.title }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </nav>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { XMarkIcon, ArrowUpIcon, CheckIcon } from '@heroicons/vue/24/outline'
-import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
+import { ArrowUpIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 // Composants
-import OffresHeroComponent from '~/components/services/ServicesHero.vue'
-import AuditFlashComponent from '~/components/services/AuditFlash.vue'
-import FormationComponent from '~/components/services/Formation.vue'
 import AteliersComponent from '~/components/services/Ateliers.vue'
+import AuditFlashComponent from '~/components/services/AuditFlash.vue'
 import CoachingComponent from '~/components/services/Coaching.vue'
-import SolutionsComparisonComponent from '~/components/services/SolutionsComparison.vue'
 import EvolutionSection from '~/components/services/EvolutionSection.vue'
-import BookingCTAComponent from '~/components/home/BookingCTA.vue'
+import FormationComponent from '~/components/services/Formation.vue'
+import OffresHeroComponent from '~/components/services/ServicesHero.vue'
+import SolutionsComparisonComponent from '~/components/services/SolutionsComparison.vue'
 
 // Enregistrement du plugin ScrollTrigger
 gsap.registerPlugin(ScrollTrigger)
@@ -213,7 +239,6 @@ const ateliersSection = ref<InstanceType<typeof AteliersComponent> | null>(null)
 const coachingSection = ref<InstanceType<typeof CoachingComponent> | null>(null)
 const comparisonSection = ref<InstanceType<typeof SolutionsComparisonComponent> | null>(null)
 const evolutionSection = ref<InstanceType<typeof EvolutionSection> | null>(null)
-const bookingSection = ref<InstanceType<typeof BookingCTAComponent> | null>(null)
 
 // État des modals
 const showBookingModal = ref(false)
@@ -224,6 +249,16 @@ const showScrollTopButton = ref(false)
 
 // État de la section active pour la navigation
 const activeSection = ref<string>('hero')
+
+// Configuration des sections pour la navigation
+const sections = [
+  { id: 'hero', title: 'Accueil', ref: heroSection },
+  { id: 'audit', title: 'Audit Flash', ref: auditSection },
+  { id: 'formation', title: 'Formation', ref: formationSection },
+  { id: 'ateliers', title: 'Ateliers', ref: ateliersSection },
+  { id: 'coaching', title: 'Coaching', ref: coachingSection },
+  { id: 'comparison', title: 'Comparaison', ref: comparisonSection }
+]
 
 // Animations
 onMounted(() => {
@@ -384,17 +419,14 @@ function handleScroll() {
 function scrollToSection(ref: any) {
   if (!ref.value?.$el) return
   
-  // Détection du support pour scrollBehavior
-  if ('scrollBehavior' in document.documentElement.style) {
-    ref.value.$el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  } else {
-    // Fallback pour les navigateurs qui ne supportent pas scrollBehavior
-    const targetPosition = ref.value.$el.getBoundingClientRect().top + window.pageYOffset
-    window.scrollTo({
-      top: targetPosition,
-      behavior: 'smooth'
-    })
-  }
+  // Calcul de la position avec un petit offset pour la navigation fixe
+  const offset = 32 // Ajustez cette valeur selon vos besoins
+  const targetPosition = ref.value.$el.getBoundingClientRect().top + window.pageYOffset - offset
+  
+  window.scrollTo({
+    top: targetPosition,
+    behavior: 'smooth'
+  })
 }
 
 function scrollToTop() {
