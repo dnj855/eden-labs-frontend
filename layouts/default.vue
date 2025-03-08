@@ -4,8 +4,9 @@
     <main>
       <NuxtPage />
     </main>
-    <CTANewsletter />
-        <BookingCTA
+    <CTANewsletter v-if="!isLegalMentionsPage" />
+    <BookingCTA
+      v-if="!isLegalMentionsPage"
       ref="bookingSection"
       @submit-booking="submitBooking"
     />
@@ -49,7 +50,7 @@
         </div>
         <div class="mt-8 pt-8 border-t border-secondary/10">
           <p class="text-center text-secondary/40 text-sm font-body">
-            © {{ new Date().getFullYear() }} Eden Labs. Tous droits réservés.
+            © {{ new Date().getFullYear() }} Eden Labs. Tous droits réservés. - <NuxtLink to="/legal-mentions" class="text-secondary hover:text-tertiary transition-colors duration-200 font-body">Mentions légales</NuxtLink>
           </p>
         </div>
       </div>
@@ -121,12 +122,17 @@
 
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const isLegalMentionsPage = computed(() => route.path === '/legal-mentions')
+
 const navigationItems = [
   { name: 'Accueil', path: '/' },
   { name: 'Services', path: '/services' },
-  { name: 'À propos', path: '/about' },
   { name: 'Ressources', path: '/resources' },
   { name: 'Blog', path: '/blog' },
+  { name: 'À propos', path: '/about' },
 ]
 
 function openBookingModal() {

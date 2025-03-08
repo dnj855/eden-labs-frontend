@@ -113,16 +113,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const isOpen = ref(false)
 
 const navigationItems = [
   { name: 'Accueil', path: '/' },
   { name: 'Services', path: '/services' },
-  { name: 'À propos', path: '/about' },
   { name: 'Ressources', path: '/resources' },
   { name: 'Blog', path: '/blog' },
+  { name: 'À propos', path: '/about' },
 ]
 
 // Fermer le menu quand l'écran devient large
