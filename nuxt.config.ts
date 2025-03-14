@@ -59,4 +59,10 @@ export default defineNuxtConfig({
   experimental: {
     payloadExtraction: true
   },
+  runtimeConfig: {
+    public: {
+      strapiUrl: process.env.STRAPI_URL,
+      strapiApiToken: process.env.STRAPI_API_TOKEN
+    }
+  }
 })
