@@ -15,6 +15,8 @@
 import ResourceCard from '~/components/resources/ResourceCard.vue';
 import ResourcesHero from '~/components/resources/ResourcesHero.vue';
 
+
+
 const baseUrl = useRuntimeConfig().public.strapiUrl;
 const { $api } = useNuxtApp();
 const { data } = await $api.fetch(baseUrl + '/api/ressources?populate=*');
