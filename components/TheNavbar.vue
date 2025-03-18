@@ -35,8 +35,7 @@
           <button
             @click="toggleMenu"
             class="inline-flex items-center justify-center p-2 rounded-md text-secondary/50 hover:text-secondary hover:bg-light focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
-            aria-expanded="false"
-            :aria-expanded="isOpen.toString()"
+            :aria-expanded="isOpen"
             aria-controls="mobile-menu"
           >
             <span class="sr-only">{{ isOpen ? 'Fermer' : 'Ouvrir' }} le menu</span>
@@ -117,13 +116,21 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const isOpen = ref(false)
 
-const navigationItems = [
-  { name: 'Accueil', path: '/' },
-  { name: 'Services', path: '/services' },
-  { name: 'Ressources', path: '/resources' },
-  { name: 'Blog', path: '/blog' },
-  { name: 'À propos', path: '/about' },
-]
+interface NavigationItem {
+  name: string;
+  path: string;
+}
+
+interface NavigationResponse {
+  data: {
+    data: NavigationItem[];
+  };
+}
+
+const baseUrl = useRuntimeConfig().public.strapiUrl;
+const { $api } = useNuxtApp();
+const { data } = await $api.fetch(baseUrl + '/api/Navigation-Item');
+const navigationItems = computed(() => (data.value as NavigationResponse)?.data?.data || []);
 
 // Fermer le menu quand l'écran devient large
 const checkScreenSize = () => {
@@ -149,7 +156,7 @@ const closeMenu = () => {
 }
 
 // Gestionnaire pour la touche Escape
-const handleEscape = (e) => {
+const handleEscape = (e: KeyboardEvent) => {
   if (e.key === 'Escape' && isOpen.value) {
     closeMenu()
   }

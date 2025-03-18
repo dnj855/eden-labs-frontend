@@ -27,23 +27,23 @@
       @contact="openContactModal"
     />
 
-    <!-- Démo IA -->
+    <!-- Démo IA
     <AiDemoComponent
       ref="aiDemoSection"
       @start-audit="openBookingModal"
-    />
+    /> -->
 
-    <!-- Témoignages -->
+    <!-- Témoignages
     <TestimonialsComponent
       ref="testimonialsSection"
       @start-audit="openBookingModal"
-    />
+    /> -->
 
-    <!-- Ressources -->
+    <!-- Ressources
     <ResourcesComponent
       ref="resourcesSection"
       @download-resource="downloadResource"
-    />
+    /> -->
 
     <!-- Bouton retour en haut -->
     <transition

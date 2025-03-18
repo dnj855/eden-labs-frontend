@@ -121,19 +121,27 @@
 </template>
 
 <script setup lang="ts">
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { useRoute } from 'vue-router'
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
+import { useRoute } from 'vue-router';
 
 const route = useRoute()
 const isLegalMentionsPage = computed(() => route.path === '/legal-mentions')
 
-const navigationItems = [
-  { name: 'Accueil', path: '/' },
-  { name: 'Services', path: '/services' },
-  { name: 'Ressources', path: '/resources' },
-  { name: 'Blog', path: '/blog' },
-  { name: 'À propos', path: '/about' },
-]
+interface NavigationItem {
+  name: string;
+  path: string;
+}
+
+interface NavigationResponse {
+  data: {
+    data: NavigationItem[];
+  };
+}
+
+const baseUrl = useRuntimeConfig().public.strapiUrl;
+const { $api } = useNuxtApp();
+const { data } = await $api.fetch(baseUrl + '/api/Navigation-Item');
+const navigationItems = computed(() => (data.value as NavigationResponse)?.data?.data || []);
 
 function openBookingModal() {
   showBookingModal.value = true
