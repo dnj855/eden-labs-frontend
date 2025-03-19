@@ -159,29 +159,15 @@
       </div>
     </section>
 
-    <!-- Bouton retour en haut -->
-    <transition
-      enter-active-class="transition ease-out duration-300"
-      enter-from-class="opacity-0 translate-y-4"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition ease-in duration-200"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 translate-y-4"
-    >
-      <button 
-        v-show="showScrollTopButton" 
-        @click="scrollToTop"
-        class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 p-2.5 sm:p-3 bg-primary text-light rounded-full shadow-lg transition-all duration-300 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        aria-label="Retour en haut de page"
-      >
-        <ArrowUpIcon class="h-4 w-4 sm:h-5 sm:w-5" />
-      </button>
-    </transition>
+    <!-- Modal de réservation -->
+    <TransitionRoot as="template" :show="showBookingModal">
+      <!-- ... existing code ... -->
+    </TransitionRoot>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ArrowUpIcon } from '@heroicons/vue/24/outline'
+import { TransitionRoot } from '@headlessui/vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
@@ -199,8 +185,9 @@ const commitmentsSection = ref<HTMLElement | null>(null)
 const testimonialsSection = ref<HTMLElement | null>(null)
 const ctaSection = ref<HTMLElement | null>(null)
 
-// État du bouton de retour en haut
-const showScrollTopButton = ref(false)
+// État des modals
+const showBookingModal = ref(false)
+const bookingModalInitialFocus = ref<HTMLButtonElement | null>(null)
 
 // État de la section active pour la navigation
 const activeSection = ref<string>('hero')
@@ -288,60 +275,15 @@ onMounted(() => {
       })
     })
   }
-
-  // Gestionnaire de défilement pour le bouton de retour en haut
-  window.addEventListener('scroll', handleScroll)
-  
-  // Configuration des observateurs pour détecter la section active
-  setupIntersectionObservers()
 })
 
 onBeforeUnmount(() => {
-  // Nettoyer les écouteurs d'événements
-  window.removeEventListener('scroll', handleScroll)
-  
   // Tuer toutes les animations GSAP
   gsap.killTweensOf('*')
   
   // Nettoyer tous les ScrollTriggers
   ScrollTrigger.getAll().forEach(trigger => trigger.kill())
 })
-
-// Configuration des observateurs d'intersection pour la navigation
-function setupIntersectionObservers() {
-  const sections = [
-    { ref: visionSection, id: 'vision' },
-    { ref: historySection, id: 'history' },
-    { ref: methodologySection, id: 'methodology' },
-    { ref: commitmentsSection, id: 'commitments' },
-    { ref: testimonialsSection, id: 'testimonials' },
-    { ref: ctaSection, id: 'cta' }
-  ]
-  
-  // Seuil adaptatif en fonction de l'appareil
-  const threshold = window.innerWidth < 768 ? 0.15 : window.innerWidth < 1024 ? 0.2 : 0.3
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const sectionId = entry.target.getAttribute('data-section-id')
-        if (sectionId) activeSection.value = sectionId
-      }
-    })
-  }, { threshold })
-  
-  sections.forEach(section => {
-    if (section.ref.value) {
-      section.ref.value.setAttribute('data-section-id', section.id)
-      observer.observe(section.ref.value)
-    }
-  })
-}
-
-// Gérer l'affichage du bouton de retour en haut
-function handleScroll() {
-  showScrollTopButton.value = window.scrollY > window.innerHeight / 2
-}
 
 // Méthodes de navigation
 function scrollToSection(ref: any) {

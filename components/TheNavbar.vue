@@ -26,6 +26,7 @@
         </div>
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
           <button
+            @click="openBookingModal"
             class="bg-gradient-to-r from-secondary to-tertiary text-primary px-3 py-2 md:px-4 md:py-2 rounded-md text-sm font-headers font-medium hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
           >
             Contactez-nous
@@ -100,6 +101,7 @@
         <div class="pt-4 pb-2 border-t border-secondary/10">
           <div class="px-4 py-2">
             <button
+              @click="openBookingModal"
               class="w-full text-left block px-4 py-2 text-base font-headers font-medium bg-gradient-to-r from-secondary to-tertiary text-primary rounded-md hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200"
             >
               Contactez-nous
@@ -109,12 +111,30 @@
       </div>
     </transition>
   </nav>
+
+  <!-- Modale de réservation -->
+  <BookingModal 
+    v-model="isBookingModalOpen"
+    :is-submitting="isSubmitting"
+    :notification="notification"
+    @submit="handleBookingSubmit"
+  />
 </template>
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { useBookingModal } from '~/composables/useBookingModal';
 
 const isOpen = ref(false)
+
+// Gestion de la modale de réservation
+const { 
+  isBookingModalOpen, 
+  isSubmitting, 
+  notification, 
+  openBookingModal, 
+  handleBookingSubmit 
+} = useBookingModal()
 
 interface NavigationItem {
   name: string;

@@ -181,13 +181,23 @@
               <div>
                 <button
                   type="submit"
-                  class="w-full flex justify-center bg-gradient-to-r from-secondary to-tertiary text-primary px-3 py-2 md:px-4 md:py-4 rounded-md text-sm font-headers font-medium hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary"
+                  :disabled="isLoading"
+                  class="w-full flex justify-center items-center bg-gradient-to-r from-secondary to-tertiary text-primary px-3 py-2 md:px-4 md:py-4 rounded-md text-sm font-headers font-medium hover:from-secondary/90 hover:to-tertiary/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Réserver mon audit gratuit
+                  <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  {{ isLoading ? 'Envoi en cours...' : 'Réserver mon audit flash' }}
                 </button>
                 <p class="mt-2 sm:mt-3 text-xs sm:text-sm font-body text-secondary/60 text-center">
                   Réponse garantie sous 24h
                 </p>
+              </div>
+
+              <!-- Messages de notification -->
+              <div v-if="notification" :class="['mt-4 p-4 rounded-md text-sm font-body', notification.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800']">
+                {{ notification.message }}
               </div>
             </form>
           </div>
@@ -219,9 +229,56 @@ const form = ref({
   message: ''
 })
 
-function submitForm() {
-  // Émettre l'événement avec les données du formulaire
-  emit('submitBooking', form.value)
+const isLoading = ref(false)
+const notification = ref<{ type: 'success' | 'error', message: string } | null>(null)
+
+function resetForm() {
+  form.value = {
+    name: '',
+    email: '',
+    company: '',
+    sector: '',
+    message: ''
+  }
+}
+
+function showNotification(type: 'success' | 'error', message: string) {
+  notification.value = { type, message }
+  setTimeout(() => {
+    notification.value = null
+  }, 5000)
+}
+
+async function submitForm() {
+  isLoading.value = true
+  notification.value = null
+
+  try {
+    const response = await fetch('https://n8n.eden-labs.fr/webhook-test/cdbb67c0-410a-482e-b9d8-c593c9498ff1', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form.value)
+    })
+
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    // Émettre l'événement avec les données du formulaire
+    emit('submitBooking', form.value)
+    
+    // Réinitialiser le formulaire et afficher le message de succès
+    resetForm()
+    showNotification('success', 'Votre demande a été envoyée avec succès ! Nous vous répondrons dans les plus brefs délais.')
+  } catch (error) {
+    showNotification('error', 'Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.')
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const emit = defineEmits(['submitBooking'])

@@ -217,7 +217,7 @@
           class="group relative rounded-full bg-secondary px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-secondary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
           @click="$emit('open-booking')"
         >
-          <span class="block transition-opacity duration-300 group-hover:opacity-0">
+          <span class="cursor-pointer block transition-opacity duration-300 group-hover:opacity-0">
             Réserver un appel découverte
           </span>
           <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">

@@ -10,21 +10,16 @@
     <!-- Problématiques & Solutions -->
     <ProblemsSolutionsComponent
       ref="problemsSection"
-      @open-qualification="openQualificationModal"
     />
 
     <!-- Parcours -->
     <JourneyTimelineComponent
-      ref="journeySection"
-      @start-audit="openBookingModal"
-      @learn-more="scrollToResources"
+      ref="journeySection""
     />
 
     <!-- Solutions par secteur -->
     <SectorSolutionsComponent
       ref="sectorsSection"
-      @explore-sector="exploreSector"
-      @contact="openContactModal"
     />
 
     <!-- Démo IA
@@ -45,39 +40,18 @@
       @download-resource="downloadResource"
     /> -->
 
-    <!-- Bouton retour en haut -->
-    <transition
-      enter-active-class="transition ease-out duration-300"
-      enter-from-class="opacity-0 translate-y-4"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition ease-in duration-200"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 translate-y-4"
-    >
-      <button 
-        v-show="showScrollTopButton" 
-        @click="scrollToTop"
-        class="fixed bottom-6 right-6 z-40 p-2 bg-secondary/80 hover:bg-secondary text-light rounded-full shadow-lg transition-all duration-300"
-        aria-label="Retour en haut de page"
-      >
-        <ArrowUpIcon class="h-5 w-5" />
-      </button>
-    </transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { ArrowUpIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 // Types pour les composants
 
 // Composants
 import AiDemoComponent from '~/components/home/AiDemo.vue'
-import BookingCTAComponent from '~/components/home/BookingCTA.vue'
 import JourneyTimelineComponent from '~/components/home/JourneyTimeline.vue'
 import ProblemsSolutionsComponent from '~/components/home/ProblemsSolutions.vue'
 import ResourcesComponent from '~/components/home/Resources.vue'
@@ -97,14 +71,13 @@ const journeySection = ref<InstanceType<typeof JourneyTimelineComponent> | null>
 const sectorsSection = ref<InstanceType<typeof SectorSolutionsComponent> | null>(null)
 const aiDemoSection = ref<InstanceType<typeof AiDemoComponent> | null>(null)
 const testimonialsSection = ref<InstanceType<typeof TestimonialsComponent> | null>(null)
-const bookingSection = ref<InstanceType<typeof BookingCTAComponent> | null>(null)
 
 // État des modals
 const showBookingModal = ref(false)
 const bookingModalInitialFocus = ref<HTMLButtonElement | null>(null)
 
-// État du bouton de retour en haut
-const showScrollTopButton = ref(false)
+// État de la section active pour la navigation
+const activeSection = ref<string>('hero')
 
 // Animations
 onMounted(() => {
@@ -154,7 +127,6 @@ onMounted(() => {
       aiDemoSection.value?.$el,
       testimonialsSection.value?.$el,
       resourcesSection.value?.$el,
-      bookingSection.value?.$el
     ].filter((section): section is HTMLElement => section !== undefined && section !== null)
 
     sections.forEach((section) => {
@@ -172,26 +144,15 @@ onMounted(() => {
       })
     })
   }
-
-  // Gestionnaire de défilement pour le bouton de retour en haut
-  window.addEventListener('scroll', handleScroll)
 })
 
 onBeforeUnmount(() => {
-  // Nettoyer les écouteurs d'événements
-  window.removeEventListener('scroll', handleScroll)
-  
   // Tuer toutes les animations GSAP
   gsap.killTweensOf('*')
   
   // Nettoyer tous les ScrollTriggers
   ScrollTrigger.getAll().forEach(trigger => trigger.kill())
 })
-
-// Gérer l'affichage du bouton de retour en haut
-function handleScroll() {
-  showScrollTopButton.value = window.scrollY > window.innerHeight
-}
 
 // Méthodes de navigation
 function scrollToSection(ref: any) {

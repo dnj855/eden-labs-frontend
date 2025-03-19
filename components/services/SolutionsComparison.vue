@@ -142,7 +142,7 @@
                 <span class="text-xs sm:text-sm text-secondary/80">1 atelier thématique personnalisé (0,5 jour)</span>
               </li>
             </ul>
-            <button @click="$emit('open-booking')" class="mt-4 sm:mt-6 w-full rounded-md bg-primary px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white hover:bg-primary/90">
+            <button @click="$emit('open-booking')" class="cursor-pointer mt-4 sm:mt-6 w-full rounded-md bg-primary px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white hover:bg-primary/90">
               Réserver ce pack
             </button>
           </div>
@@ -182,7 +182,7 @@
                 <span class="text-xs sm:text-sm text-secondary/80">1 mois de coaching personnalisé (5h)</span>
               </li>
             </ul>
-            <button @click="$emit('open-booking')" class="mt-4 sm:mt-6 w-full rounded-md bg-primary px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white hover:bg-primary/90">
+            <button @click="$emit('open-booking')" class="cursor-pointer mt-4 sm:mt-6 w-full rounded-md bg-primary px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white hover:bg-primary/90">
               Réserver ce pack
             </button>
           </div>
