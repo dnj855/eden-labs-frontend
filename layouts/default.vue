@@ -56,73 +56,33 @@
       </div>
     </footer>
   </div>
-  <TransitionRoot appear :show="showBookingModal" as="template">
-      <Dialog as="div" @close="showBookingModal = false" class="relative z-50" :initialFocus="bookingModalInitialFocus">
-        <TransitionChild
-          as="template"
-          enter="duration-300 ease-out"
-          enter-from="opacity-0"
-          enter-to="opacity-100"
-          leave="duration-200 ease-in"
-          leave-from="opacity-100"
-          leave-to="opacity-0"
-        >
-          <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" />
-        </TransitionChild>
 
-        <div class="fixed inset-0 overflow-y-auto">
-          <div class="flex min-h-full items-center justify-center p-4 text-center">
-            <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0 scale-95"
-              enter-to="opacity-100 scale-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100 scale-100"
-              leave-to="opacity-0 scale-95"
-            >
-              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
-                <div class="absolute top-0 right-0 pt-4 pr-4">
-                  <button
-                    type="button"
-                    class="text-secondary/50 hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
-                    @click="showBookingModal = false"
-                  >
-                    <span class="sr-only">Fermer</span>
-                    <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </div>
-                
-                <DialogTitle as="h3" class="text-lg sm:text-xl font-headers font-medium leading-6 text-secondary">
-                  Réservation confirmée
-                </DialogTitle>
-                <div class="mt-2">
-                  <p class="text-sm sm:text-base text-secondary/70">
-                    Merci pour votre intérêt ! Nous vous contacterons dans les 24h pour planifier votre audit.
-                  </p>
-                </div>
+  <!-- Bouton retour en haut - Taille adaptée pour mobile -->
+  <transition
+    enter-active-class="transition ease-out duration-300"
+    enter-from-class="opacity-0 translate-y-4"
+    enter-to-class="opacity-100 translate-y-0"
+    leave-active-class="transition ease-in duration-200"
+    leave-from-class="opacity-100 translate-y-0"
+    leave-to-class="opacity-0 translate-y-4"
+  >
+    <button 
+      v-show="showScrollTopButton" 
+      @click="scrollToTop"
+      class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 p-2.5 sm:p-3 bg-primary text-light rounded-full shadow-lg transition-all duration-300 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      aria-label="Retour en haut de page"
+    >
+      <ArrowUpIcon class="h-4 w-4 sm:h-5 sm:w-5" />
+    </button>
+  </transition>
 
-                <div class="mt-4 sm:mt-6">
-                  <button
-                    ref="bookingModalInitialFocus"
-                    type="button"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm sm:text-base font-medium text-secondary hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                    @click="showBookingModal = false"
-                  >
-                    Compris, merci !
-                  </button>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
-        </div>
-      </Dialog>
-    </TransitionRoot>
+  <BookingModal v-model="isBookingModalOpen" />
 </template>
 
 <script setup lang="ts">
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
+import { ArrowUpIcon } from '@heroicons/vue/24/outline';
 import { useRoute } from 'vue-router';
+import { useBookingModal } from '../composables/useBookingModal';
 
 const route = useRoute()
 const isLegalMentionsPage = computed(() => route.path === '/legal-mentions')
@@ -143,17 +103,67 @@ const { $api } = useNuxtApp();
 const { data } = await $api.fetch(baseUrl + '/api/Navigation-Item');
 const navigationItems = computed(() => (data.value as NavigationResponse)?.data?.data || []);
 
-function openBookingModal() {
-  showBookingModal.value = true
-}
+const { isBookingModalOpen, openBookingModal } = useBookingModal()
 
-const showBookingModal = ref(false)
-const bookingModalInitialFocus = ref<HTMLButtonElement | null>(null)
-
-function submitBooking(formData: any) {
-  // TODO: Implémenter la soumission du formulaire
-  console.log('Soumission du formulaire:', formData)
+// Fonction pour gérer la soumission de la réservation
+const submitBooking = () => {
   openBookingModal()
 }
+
+function scrollToSection(ref: any) {
+  if (!ref.value?.$el) return
+  
+  // Détection du support pour scrollBehavior
+  if ('scrollBehavior' in document.documentElement.style) {
+    ref.value.$el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  } else {
+    // Fallback pour les navigateurs qui ne supportent pas scrollBehavior
+    const targetPosition = ref.value.$el.getBoundingClientRect().top + window.pageYOffset
+    window.scrollTo({
+      top: targetPosition,
+      behavior: 'smooth'
+    })
+  }
+}
+
+const showScrollTopButton = ref(false)
+
+// État de la section active pour la navigation
+const activeSection = ref<string>('hero')
+
+// Configuration des observateurs d'intersection pour la navigation
+function setupIntersectionObservers() {
+  const sections = document.querySelectorAll('section[id]')
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        activeSection.value = entry.target.id
+      }
+    })
+  }, { threshold: 0.5 })
+  
+  sections.forEach(section => {
+    observer.observe(section)
+  })
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+onMounted(() => {
+  const scrollHandler = () => {
+    showScrollTopButton.value = window.scrollY > 100
+  }
+  window.addEventListener('scroll', scrollHandler)
+  
+  // Configuration des observateurs pour détecter la section active
+  setupIntersectionObservers()
+  
+  onBeforeUnmount(() => {
+    window.removeEventListener('scroll', scrollHandler)
+  })
+})
 
 </script> 
