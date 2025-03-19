@@ -38,9 +38,11 @@
         <div class="mt-8 flex justify-center">
           <button
             class="inline-flex items-center justify-center rounded-md border-2 border-primary bg-primary px-4 py-3 text-sm font-medium text-secondary shadow-sm"
-            @click="$emit('startAudit')"
+            data-cal-link="clangroth/decouverte-eden-labs"
+            data-cal-namespace="decouverte-eden-labs"
+            data-cal-config='{"layout":"month_view"}'
           >
-            Commencer par l'audit gratuit
+            Réserver un appel découverte gratuit
           </button>
         </div>
       </div>
@@ -102,7 +104,7 @@
                 </li>
               </ul>
 
-              <!-- Témoignage -->
+              <!-- Témoignage
               <div class="border-t border-light/50 pt-4">
                 <p class="text-sm italic text-secondary/70">
                   "{{ steps[activeTabletStep].testimonial.quote }}"
@@ -122,7 +124,7 @@
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -130,9 +132,11 @@
           <div class="mt-10 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center">
             <button
               class="inline-flex items-center justify-center rounded-md border-2 border-primary bg-primary px-5 py-3 text-sm font-medium text-secondary shadow-sm"
-              @click="$emit('startAudit')"
+              data-cal-link="clangroth/decouverte-eden-labs"
+              data-cal-namespace="decouverte-eden-labs"
+              data-cal-config='{"layout":"month_view"}'
             >
-              Commencer par l'audit gratuit
+              Réserver un appel découverte gratuit
             </button>
             <button
               class="inline-flex items-center justify-center rounded-md border-2 border-secondary bg-transparent px-5 py-3 text-sm font-medium text-secondary"
@@ -229,7 +233,7 @@
                   </li>
                 </ul>
 
-                <!-- Témoignage -->
+                <!-- Témoignage
                 <div 
                   class="mt-6 lg:mt-8 rounded-lg bg-light/30 p-4 lg:p-6 transform transition-all duration-300"
                   :class="[activeStep >= index ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0']"
@@ -252,7 +256,7 @@
                       </p>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </li>
           </ul>
@@ -261,17 +265,19 @@
         <!-- Desktop CTAs -->
         <div class="mt-16 lg:mt-24 flex justify-center space-x-6">
           <button
-            class="inline-flex items-center justify-center rounded-md border-2 border-primary bg-primary px-6 lg:px-8 py-3.5 lg:py-4 text-base lg:text-lg font-medium text-secondary shadow-sm transition-all duration-200 hover:bg-primary-light hover:border-primary-light hover:scale-105"
-            @click="$emit('startAudit')"
+            class="cursor-pointer inline-flex items-center justify-center rounded-md border-2 border-primary bg-primary px-6 lg:px-8 py-3.5 lg:py-4 text-base lg:text-lg font-medium text-secondary shadow-sm transition-all duration-200 hover:bg-primary-light hover:border-primary-light hover:scale-105"
+            data-cal-link="clangroth/decouverte-eden-labs"
+            data-cal-namespace="decouverte-eden-labs"
+            data-cal-config='{"layout":"month_view"}'
           >
-            Commencer par l'audit gratuit
+            Réserver un appel découverte gratuit
           </button>
-          <button
+          <NuxtLink
+            to="/services"
             class="inline-flex items-center justify-center rounded-md border-2 border-secondary bg-transparent px-6 lg:px-8 py-3.5 lg:py-4 text-base lg:text-lg font-medium text-secondary transition-all duration-200 hover:bg-secondary hover:text-light hover:scale-105"
-            @click="$emit('learnMore')"
           >
             Découvrir notre méthode en détail
-          </button>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -295,7 +301,7 @@ const steps = [
   {
     id: 1,
     icon: MagnifyingGlassIcon,
-    title: 'Audit flash gratuit',
+    title: 'Audit flash',
     description: 'Identification rapide des opportunités d\'IA dans votre entreprise en 45 minutes.',
     deliverables: [
       'Cartographie des processus optimisables',

@@ -123,6 +123,7 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { useRoute } from 'vue-router';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 
 const route = useRoute()
 const isLegalMentionsPage = computed(() => route.path === '/legal-mentions')

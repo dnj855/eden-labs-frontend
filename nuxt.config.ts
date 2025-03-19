@@ -16,6 +16,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Eden Labs - Conseil en IA Générative',
+      htmlAttrs: {
+        lang: 'fr',
+      },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
